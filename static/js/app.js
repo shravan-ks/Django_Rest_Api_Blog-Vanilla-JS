@@ -1,8 +1,47 @@
+const root = document.getElementById('root');
+
+
+//POST / Create Post
+document.querySelector('#postForm').addEventListener('submit', e => {
+    e.preventDefault();
+    const title = document.getElementById('title');
+    const content = document.getElementById('content');
+    const author = document.getElementById('author');
+    createPost(title.value, content.value,author.value);
+    title.value = '';
+    content.value= '';
+    author.value = '';
+})
+
+
+function createPost(title, content,author) {
+    const data = {
+        method: "POST",
+        headers:{
+          'content-type': "application/json"
+        },
+        body: JSON.stringify({
+            title, content,author
+        })
+    }
+    fetch('api/blog/create',data)
+    .then(() => {
+        getPostList();
+    })
+    .catch(err => {
+        console.error(err);
+    })
+
+}
+
+
+//GET / Fetch Post
 function getPostList() {
-    fetch('api/blog')
+    fetch('api/blog/')
         .then(res => res.json())
         .then(data => {
-            mapPosts(data)
+            clearChildren(root);
+            mapPosts(data);
         })
         .catch(err =>{
             console.log(err);
@@ -24,8 +63,13 @@ function appendTag(parent, element){
     return parent.appendChild(element)
 }
 
+function clearChildren(node) {
+    while (node.firstChild){
+        node.removeChild(node.firstChild);
+    }
+}
+
 function renderPost(post){
-    const root = document.getElementById('root');
     const div =  createNode('div')
     div.className = 'post-item'
     const title = createNode('h2')
