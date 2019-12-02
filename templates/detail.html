@@ -9,17 +9,19 @@
 <body>
     <h1>Detail View</h1>
 
-{#    <div class="form">#}
-{#        <form method="POST" id="postForm">#}
-{#            <input type="text" id="title" placeholder="Title" ><br>#}
-{#            <input type="text" id="content" placeholder="content"><br>#}
-{#            <input type="text" id="author" placeholder="user"><br>#}
-{#            <button type="submit">Create</button>#}
-{#        </form>#}
-{#    </div>#}
 
     <div id="root">
 
+    </div>
+
+    <h1>Update Post</h1>
+        <div class="form">
+        <form method="POST" id="postForm">
+            <input type="text" id="title" placeholder="Title" ><br>
+            <input type="text" id="content" placeholder="content"><br>
+            <input type="hidden" id="author" placeholder="user"><br>
+            <button type="submit">Update</button>
+        </form>
     </div>
     <script src="{% static 'js/detail.js' %}"></script>
 </body>

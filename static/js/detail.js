@@ -1,5 +1,10 @@
 const root = document.getElementById('root');
 
+const title = document.getElementById('title');
+const content = document.getElementById('content');
+const author = document.getElementById('author');
+
+
 //To Extract blog post ID from url
 const pathname = window.location.pathname;
 const pathnameParts = pathname.split('/')
@@ -11,13 +16,20 @@ function getPostList(pathID) {
         .then(res => res.json())
         .then(data => {
             clearChildren(root);
+            // Get POST Method
             renderPost(data);
+            // to get author name
+            getAuthor(data.author);
+            //Prepopulate Form
+            prepopulateForm(data)
         })
         .catch(err =>{
             console.log(err);
         })
 
 }
+
+
 function createNode(tag) {
     return document.createElement(tag)
 }
@@ -36,10 +48,7 @@ function renderPost(post){
     const div =  createNode('div')
     div.className = 'post-item'
     const title = createNode('h2')
-    const author = createNode('small')
-    author.innerText = ` written by ${post.author}`;
     title.innerText = post.title
-    appendTag(title, author)
     const content =  createNode('p')
     content.innerText = post.content;
     const publishDate = createNode('span')
@@ -55,5 +64,69 @@ function renderPost(post){
     appendTag(root, div);
 }
 
-
 getPostList(pathID)
+
+
+// Pre-Populate Form for Updating
+function prepopulateForm(data) {
+    title.value = data.title;
+    content.value= data.content;
+    author.value = data.author;
+}
+
+//Onclick Form event
+document.querySelector('#postForm').addEventListener('submit', e => {
+    e.preventDefault();
+    updatePost(title.value, content.value,author.value);
+    title.value = '';
+    content.value= '';
+    author.value = '';
+})
+
+
+
+// Update Method
+
+function updatePost(title, content,author) {
+    const data = {
+        method: "PUT",
+        headers:{
+          'content-type': "application/json"
+        },
+        body: JSON.stringify({
+            title, content,author
+        })
+    }
+    fetch(`/api/blog/${pathID}/update`,data)
+    .then(() => {
+        getPostList(pathID);
+    })
+    .catch(err => {
+        console.error(err);
+    })
+
+}
+
+// To get Author name i.e username
+function getAuthor(authorID) {
+
+    fetch(`/api/blog/author/${authorID}`)
+        .then(res => res.json())
+        .then(data => {
+             renderAuthor(data);
+        })
+        .catch(err =>{
+            console.log(err);
+        })
+
+}
+
+//Render Author
+function renderAuthor(data) {
+    const divs =  createNode('div')
+    const authorname =  createNode('h4')
+    authorname.innerText = `Written By ${data.username}`
+    appendTag(divs, authorname);
+    appendTag(root, divs);
+}
+

@@ -1,10 +1,25 @@
 from rest_framework import serializers
 
-from blog.models import Post
+from blog.models import Post, Author
+
+
+# to get author name
+class AuthorSerializer(serializers.ModelSerializer):
+    username = serializers.SerializerMethodField()
+    class Meta:
+        model = Author
+        fields = (
+            'username',
+        )
+
+    def get_username(self,obj):
+        return obj.user.username
+
+
 
 
 class PostSerializer(serializers.ModelSerializer):
-    author = serializers.SerializerMethodField()
+    # author = serializers.SerializerMethodField()
     class Meta:
         model = Post
         fields = (
@@ -16,8 +31,8 @@ class PostSerializer(serializers.ModelSerializer):
             'author',
         )
 
-    def get_author(self,obj):
-        return obj.author.user.username
+    # def get_author(self,obj):
+    #     return obj.author.user.username
 
 
 class CreatePostSerializer(serializers.ModelSerializer):
