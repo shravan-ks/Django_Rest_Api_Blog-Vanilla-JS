@@ -79,10 +79,7 @@ function renderPost(post){
     detailLink.href = `/blog/${post.id}`
     const title = createNode('h2')
     appendTag(detailLink, title)
-    const author = createNode('small')
-    author.innerText = ` written by ${post.author}`;
     title.innerText = post.title
-    appendTag(title, author)
     const content =  createNode('p')
     content.innerText = post.content;
     const publishDate = createNode('span')
