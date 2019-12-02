@@ -62,6 +62,9 @@ function renderPost(post){
     appendTag(div, publishDate)
     appendTag(div, lastUpdated)
     appendTag(root, div);
+
+    //call to append delete button function
+    appendDeletebtn(post)
 }
 
 getPostList(pathID)
@@ -123,10 +126,46 @@ function getAuthor(authorID) {
 
 //Render Author
 function renderAuthor(data) {
+    const postDiv = document.querySelector('.post-item');
     const divs =  createNode('div')
     const authorname =  createNode('h4')
     authorname.innerText = `Written By ${data.username}`
     appendTag(divs, authorname);
-    appendTag(root, divs);
+    appendTag(postDiv, divs);
+}
+
+
+//DELETE Blog Post
+
+function deletePost(postID) {
+    const data = {
+        method: "DELETE",
+        headers:{
+          'content-type': "application/json"
+        },
+    }
+    // fetch(`/api/blog/${pathID}/delete`,data) this method is right too getting blog post id from global const pathID
+    fetch(`/api/blog/${postID}/delete`,data)
+    .then(() => {
+        window.location = ('/')
+    })
+    .catch(err => {
+        console.error(err);
+    })
+
+}
+
+
+//append delete button to post item div
+
+function appendDeletebtn(post) {
+    const postDiv = document.querySelector('.post-item');
+    const deletebtn =  createNode('button')
+    deletebtn.innerText = 'delete';
+    deletebtn.className = 'delete-btn'
+    deletebtn.addEventListener('click', e => {
+        deletePost(post.id)
+    });
+    appendTag(postDiv, deletebtn);
 }
 

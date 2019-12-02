@@ -42,6 +42,7 @@ function getPostList() {
         .then(data => {
             clearChildren(root);
             mapPosts(data);
+
         })
         .catch(err =>{
             console.log(err);
@@ -52,6 +53,8 @@ function getPostList() {
 function mapPosts(data){
     return data.map(post => {
         renderPost(post);
+         getAuthor(post.author);
+
     })
 }
 
@@ -86,14 +89,41 @@ function renderPost(post){
     publishDate.innerText = `Published: ${new Date(post.publish_date).toDateString()}`
     const lastUpdated = createNode('span')
     lastUpdated.innerText = `Last Updated: ${new Date(post.updated).toDateString()}`
-
+    // const div_author =  createNode('div')
+    // div_author.className = 'post-author'
 
     appendTag(div, detailLink);
     appendTag(div, content)
     appendTag(div, publishDate)
     appendTag(div, lastUpdated)
+    // appendTag(div, div_author);
     appendTag(root, div);
+
+
 }
 
 
 getPostList()
+
+
+// To get Author name i.e username
+function getAuthor(authorID) {
+    fetch(`/api/blog/author/${authorID}`)
+        .then(res => res.json())
+        .then(data => {
+             renderAuthor(data);
+        })
+        .catch(err =>{
+            console.log(err);
+        })
+
+}
+
+//Render Author
+function renderAuthor(data) {
+    const postDiv = document.querySelector('.post-item');
+    const authorname =  createNode('h4')
+    authorname.innerText = `Written By ${data.username}`
+    appendTag(postDiv, authorname);
+    appendTag(root, postDiv);
+}

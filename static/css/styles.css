@@ -1,4 +1,5 @@
 .post-item {
+    position: relative;
     box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2);
     transition: 0.5s;
     padding: 1px 25px 15px 25px;
@@ -12,4 +13,9 @@
 
 #root {
     padding: 2px 16px;
+}
+.delete-btn{
+    top: 0;
+    right: 0;
+    position: absolute;
 }

@@ -44,3 +44,8 @@ class PostUpdateView(generics.UpdateAPIView):
     permission_classes = (AllowAny,)
     queryset = Post.objects.all()
     serializer_class = CreatePostSerializer
+
+
+class PostDeleteView(generics.DestroyAPIView):
+    permission_classes = (AllowAny,)
+    queryset = Post.objects.all()
